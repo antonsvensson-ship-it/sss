@@ -1,0 +1,27 @@
+name: Ombalansering krypto
+
+on:
+  schedule:
+    - cron: "23 7 * * *"   # varje dag kl. 07:23 UTC
+  workflow_dispatch:        # kör manuellt för att testa
+
+jobs:
+  ombalansera:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Kör boten
+        env:
+          OKX_API_KEY: ${{ secrets.OKX_API_KEY }}
+          OKX_API_SECRET: ${{ secrets.OKX_API_SECRET }}
+          OKX_PASSPHRASE: ${{ secrets.OKX_PASSPHRASE }}
+          PAR: ${{ vars.PAR }}
+          BUDGET: ${{ vars.BUDGET }}
+          MAL_ANDEL: ${{ vars.MAL_ANDEL }}
+          BAND: ${{ vars.BAND }}
+          LIVE: ${{ vars.LIVE }}
+          OKX_DEMO: ${{ vars.OKX_DEMO }}
+        run: python ombalansera.py
